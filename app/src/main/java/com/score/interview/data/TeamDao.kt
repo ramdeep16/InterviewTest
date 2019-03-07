@@ -1,4 +1,4 @@
-package com.score.interview.model
+package com.score.interview.data
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
@@ -11,7 +11,7 @@ interface TeamDao {
 
     // Team Entity
     @Query("SELECT * FROM Team")
-    fun getAllTeamsFromDatabase(): Single<List<Team>>
+    fun getAllTeamsFromDatabase(): List<Team>
 
     @Query("SELECT * from Team WHERE id = :teamID")
     fun getTeamWithTeamID(teamID: Int): Single<Team>
@@ -20,11 +20,8 @@ interface TeamDao {
     fun insertTeam(team: Team)
 
     // Player Entity
-    @Query("SELECT * from Player")
-    fun getAllPlayers(teamID: Int): Single<List<Player>>
-
     @Query("SELECT * from Player WHERE id = :teamID")
-    fun getPlayersWithTeamID(teamID: Int): Single<List<Player>>
+    fun getPlayersWithTeamID(teamID: Int): List<Player>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPlayer(player: Player)

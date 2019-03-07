@@ -1,4 +1,4 @@
-package com.score.interview.model
+package com.score.interview.data
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase

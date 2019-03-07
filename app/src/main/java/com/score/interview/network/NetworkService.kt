@@ -1,6 +1,6 @@
 package com.score.interview.network
 
-import com.score.interview.model.Team
+import com.score.interview.data.Team
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Headers

@@ -2,7 +2,7 @@ package com.score.interview.activity
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.score.interview.model.Team
+import com.score.interview.data.Team
 import com.score.interview.network.TeamsAPIClass
 import io.reactivex.disposables.CompositeDisposable
 
@@ -36,10 +36,12 @@ class TeamListViewModel : ViewModel() {
     }
 
     private fun fetchTeams() {
+        progressBarLiveData.value = true
         mCompositeDisposable.add(
-            teamsAPIClass.getTeamsList()
+            teamsAPIClass.getTeams()
                 .subscribe({ teams ->
                     if (teams != null) {
+                        progressBarLiveData.value = false
                         teamsListLiveData.value = teams
                     }
                 }, {

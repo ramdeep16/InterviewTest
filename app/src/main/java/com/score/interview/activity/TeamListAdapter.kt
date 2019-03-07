@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.score.interview.R
-import com.score.interview.model.Team
+import com.score.interview.data.Team
 import kotlinx.android.synthetic.main.custom_team_list_layout.view.*
 
 class TeamListAdapter(private val teamList: List<Team>): RecyclerView.Adapter<TeamListAdapter.TeamViewHolder>() {

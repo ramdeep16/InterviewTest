@@ -1,4 +1,4 @@
-package com.score.interview.model
+package com.score.interview.data
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
@@ -7,20 +7,29 @@ import com.google.gson.annotations.Expose
 
 @Entity
 data class Player(
+
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    var id: Long,
+    var id: Int = 0,
+
     @SerializedName("first_name")
     @Expose
-    var firstName: String?,
+    var firstName: String = "",
+
     @SerializedName("last_name")
     @Expose
-    var lastName: String?,
+    var lastName: String = "",
+
     @SerializedName("position")
     @Expose
-    var position: String?,
+    var position: String = "",
+
     @SerializedName("number")
     @Expose
-    var number: Long
-)
+    var number: Int = 0,
+
+    var teamID: Int = 0
+){
+
+}
