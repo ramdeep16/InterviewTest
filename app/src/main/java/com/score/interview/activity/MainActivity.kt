@@ -2,42 +2,49 @@ package com.score.interview.activity
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.score.interview.R
+import com.score.interview.data.Team
+import com.score.interview.helperClasses.Constants
 import com.score.interview.helperClasses.SortOptions
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.toast
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TeamSelectionCallback {
 
-    lateinit var teamListViewModel: TeamListViewModel
-    lateinit var teamListAdapter: TeamListAdapter
+    private lateinit var teamListViewModel: TeamListViewModel
+    private lateinit var teamListAdapter: TeamListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        init();
-
+        init()
     }
 
-    /*
+    /**
      * Initialize all the variables
      * Set Layout Managers
      * */
     private fun init() {
 
         teamListViewModel = ViewModelProviders.of(this).get(TeamListViewModel::class.java)
-        teams_list_recycler_view.layoutManager = LinearLayoutManager(this)
+        teams_list_recycler_view.layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
+        progress_bar.visibility = View.VISIBLE
         setObservers()
     }
 
+    /**
+     * Observing Data from View Model using Live Data
+     */
     private fun setObservers() {
 
         teamListViewModel.getProgressBarLiveData().observe(this, Observer { value ->
@@ -57,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         teamListViewModel.getTeamList().observe(this, Observer { teamList ->
             if (teamList != null) {
                 teams_list_recycler_view.post {
-                    teamListAdapter = TeamListAdapter(this, teamList)
+                    teamListAdapter = TeamListAdapter(this, teamList, this)
                     teams_list_recycler_view.adapter = teamListAdapter
                 }
             }
@@ -71,10 +78,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when(item.itemId) {
+
+        return when (item.itemId) {
             R.id.view_alphabetically -> {
                 teamListViewModel.sortingOptionSelected = SortOptions.ALPHABETICAL
                 true
@@ -97,5 +102,20 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * TeamSelectionCallback implementation method
+     * method runs when team is selected from the TeamListAdapter
+     */
+    override fun teamSelected(teamSelected: Team) {
+
+        // Only sending the team ID to the Next Activity
+        // Will fetch the data using this teamID in the nextActivity
+        val intent = Intent(this, TeamDetailsActivity::class.java)
+        val bundle = Bundle()
+        bundle.putInt(Constants.TEAMID, teamSelected.id)
+        intent.putExtra(Constants.DATA, bundle)
+        startActivity(intent)
     }
 }

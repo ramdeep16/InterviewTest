@@ -30,6 +30,4 @@ data class Player(
     var number: Int = 0,
 
     var teamID: Int = 0
-){
-
-}
+)

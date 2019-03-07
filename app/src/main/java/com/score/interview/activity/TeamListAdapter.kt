@@ -9,7 +9,7 @@ import com.score.interview.R
 import com.score.interview.data.Team
 import kotlinx.android.synthetic.main.custom_team_list_layout.view.*
 
-class TeamListAdapter(private val context: Context, private val teamList: List<Team>): RecyclerView.Adapter<TeamListAdapter.TeamViewHolder>() {
+class TeamListAdapter(private val context: Context, private val teamList: List<Team>, private val teamSelectedCallback: TeamSelectionCallback): RecyclerView.Adapter<TeamListAdapter.TeamViewHolder>() {
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): TeamViewHolder {
         return TeamViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.custom_team_list_layout, p0, false))
@@ -21,10 +21,10 @@ class TeamListAdapter(private val context: Context, private val teamList: List<T
     }
 
     override fun onBindViewHolder(teamHolder: TeamViewHolder, position: Int) {
-
-        teamHolder.itemView.name.text = teamList[position].fullName
-        teamHolder.itemView.win.text = String.format(context.getString(R.string.win), teamList[position].wins)
-        teamHolder.itemView.loss.text = String.format(context.getString(R.string.loss), teamList[position].losses)
+        teamHolder.itemView.name_text_view.text = teamList[position].fullName
+        teamHolder.itemView.win_text_view.text = String.format(context.getString(R.string.win), teamList[position].wins)
+        teamHolder.itemView.loss_text_view.text = String.format(context.getString(R.string.loss), teamList[position].losses)
+        teamHolder.itemView.mainLayout.setOnClickListener { teamSelectedCallback.teamSelected(teamList[position]) }
     }
 
 

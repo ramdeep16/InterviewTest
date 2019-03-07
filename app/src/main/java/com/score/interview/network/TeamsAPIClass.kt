@@ -19,8 +19,8 @@ class TeamsAPIClass {
 
     private var service: NetworkService
     private val mRoomDatabaseHelper = Room.databaseBuilder(MyApplication.getInstance(), InterviewDatabase::class.java, "scoreinterview")
-            .allowMainThreadQueries()
-            .build()
+        .allowMainThreadQueries()
+        .build()
 
     // Primary Constructor
     init {
@@ -78,7 +78,20 @@ class TeamsAPIClass {
         return Observable.fromIterable(teamList).toList()
     }
 
+    // Methods used for TeamDetailsActivity
+    fun getTeamsWithID(teamID: Int) = getTeamFromDatabaseWithTeamID(teamID).toFlowable()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .unsubscribeOn(Schedulers.io())
+
     private fun getTeamFromDatabaseWithTeamID(teamID: Int): Single<Team> {
-        return mRoomDatabaseHelper.teamDao().getTeamWithTeamID(teamID)
+        val team = mRoomDatabaseHelper.teamDao().getTeamWithTeamID(teamID)
+
+        val players = mRoomDatabaseHelper.teamDao().getPlayersWithTeamID(teamID)
+
+        team.players = players
+
+        return Single.just(team)
+
     }
 }

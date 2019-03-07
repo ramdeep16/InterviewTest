@@ -15,7 +15,12 @@ class TeamListViewModel : ViewModel() {
     private lateinit var progressBarLiveData: MutableLiveData<Boolean>
     private lateinit var messageLiveData: MutableLiveData<String>
     private lateinit var teamsListLiveData: MutableLiveData<List<Team>>
+    private lateinit var teamLiveData: MutableLiveData<Team>
 
+    /**
+     * Sort option Enum
+     * Will be set according to menu click
+     */
     var sortingOptionSelected: SortOptions = SortOptions.ALPHABETICAL
         set(value) {
             field = value
@@ -44,6 +49,9 @@ class TeamListViewModel : ViewModel() {
         return teamsListLiveData
     }
 
+    /**
+     * Fetching team from network and database
+     */
     private fun fetchTeams() {
         progressBarLiveData.value = true
         mCompositeDisposable.add(
@@ -59,6 +67,9 @@ class TeamListViewModel : ViewModel() {
         )
     }
 
+    /**
+     * SORTING LIST
+     */
     private fun sortList(teamsList: List<Team>) {
 
         teamsListLiveData.value = when (sortingOptionSelected) {
@@ -72,5 +83,32 @@ class TeamListViewModel : ViewModel() {
 
     private fun handleError(throwable: Throwable) {
         messageLiveData.value = throwable.localizedMessage
+    }
+
+    /*
+     * Below Code is For Team Detail Activity
+     * */
+    fun getTeamDetail(teamID: Int): MutableLiveData<Team> {
+
+        teamLiveData = MutableLiveData()
+        getTeamWithID(teamID)
+        return teamLiveData
+    }
+
+    //Team Detail From database
+    private fun getTeamWithID(teamID: Int) {
+
+        progressBarLiveData.value = true
+        mCompositeDisposable.add(
+            teamsAPIClass.getTeamsWithID(teamID)
+                .subscribe({ team ->
+                    if (team != null) {
+                        progressBarLiveData.value = false
+                        teamLiveData.value = team
+                    }
+                }, {
+                    handleError(throwable = it)
+                })
+        )
     }
 }
