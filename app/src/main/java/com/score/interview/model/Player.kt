@@ -1,9 +1,13 @@
 package com.score.interview.model
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
+@Entity
 data class Player(
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     var id: Long,
@@ -19,7 +23,4 @@ data class Player(
     @SerializedName("number")
     @Expose
     var number: Long
-) {
-
-
-}
+)
