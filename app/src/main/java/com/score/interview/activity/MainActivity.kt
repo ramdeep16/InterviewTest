@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.score.interview.R
+import com.score.interview.helperClasses.SortOptions
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.toast
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         teamListViewModel.getTeamList().observe(this, Observer { teamList ->
             if (teamList != null) {
                 teams_list_recycler_view.post {
-                    teamListAdapter = TeamListAdapter(teamList)
+                    teamListAdapter = TeamListAdapter(this, teamList)
                     teams_list_recycler_view.adapter = teamListAdapter
                 }
             }
@@ -75,15 +76,23 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when(item.itemId) {
             R.id.view_alphabetically -> {
-                toast("view_alphabetically")
+                teamListViewModel.sortingOptionSelected = SortOptions.ALPHABETICAL
                 true
             }
-            R.id.view_by_wins -> {
-                toast("view_by_wins")
+            R.id.view_by_wins_ascending -> {
+                teamListViewModel.sortingOptionSelected = SortOptions.WINS_ASCENDING
                 true
             }
-            R.id.view_by_losses -> {
-                toast("view_by_losses")
+            R.id.view_by_losses_ascending -> {
+                teamListViewModel.sortingOptionSelected = SortOptions.LOSSES_ASCENDING
+                true
+            }
+            R.id.view_by_wins_descending -> {
+                teamListViewModel.sortingOptionSelected = SortOptions.WINS_DESCENDING
+                true
+            }
+            R.id.view_by_losses_descending -> {
+                teamListViewModel.sortingOptionSelected = SortOptions.LOSSES_ASCENDING
                 true
             }
             else -> super.onOptionsItemSelected(item)
