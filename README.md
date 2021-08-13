@@ -1,8 +1,3 @@
-# InterviewTest
-# Score
-
-Score is an android app which gets the data from the provided JSON file and cache it for further usage. User can see NBA teams' list and their players data.
-
 ### Language
 Kotlin
 ### IDE
